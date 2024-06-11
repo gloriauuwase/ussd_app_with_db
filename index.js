@@ -24,15 +24,6 @@ db.connect(err => {
     console.log('Connected to database.');
 });
 
-// In-memory storage for votes (for simplicity)
-let votes = {
-    "uwase. ": 0,
-    "gloria. ": 0,
-    "munyana. ": 0,
-    "allen. ": 0,
-    "murindwa. ": 0
-};
-
 // In-memory storage for user data (for simplicity)
 let userNames = {};
 let voters = new Set(); // Set to track phone numbers that have already voted
@@ -82,19 +73,30 @@ app.post('/ussd', (req, res) => {
             }
         } else if (userInput[2] === '2') {
             // View votes option selected
-            response = userLanguages[phoneNumber] === 'en' ? 
-                `END Votes:\n` : 
-                `END Amajwi:\n`;
-            for (let candidate in votes) {
-                response += `${candidate}: ${votes[candidate]} votes\n`;
-            }
+            const query = `SELECT Uwatowe, COUNT(*) as votes FROM voting_status GROUP BY Uwatowe`;
+            db.query(query, (err, results) => {
+                if (err) {
+                    console.error('Error retrieving votes from database:', err.stack);
+                    response = userLanguages[phoneNumber] === 'en' ? 
+                        `END Error retrieving votes. Please try again later.` : 
+                        `END Ikosa ryo kubona amajwi. Ongera ugerageze nyuma.`;
+                    res.send(response);
+                    return;
+                }
+                
+                response = userLanguages[phoneNumber] === 'en' ? `END Votes:\n` : `END Amajwi:\n`;
+                results.forEach(row => {
+                    response += `${row.Uwatowe}: ${row.votes} votes\n`;
+                });
+                res.send(response);
+            });
+            return;
         }
     } else if (userInput.length === 4) {
         // Fourth level menu: Voting confirmation
         let candidateIndex = parseInt(userInput[3]) - 1;
-        let candidateNames = Object.keys(votes);
+        let candidateNames = ["uwase", "gloria", "munyana", "allen", "murindwa"];
         if (candidateIndex >= 0 && candidateIndex < candidateNames.length) {
-            votes[candidateNames[candidateIndex]] += 1;
             voters.add(phoneNumber); // Mark this phone number as having voted
             response = userLanguages[phoneNumber] === 'en' ? 
                 `END Thank you for voting for ${candidateNames[candidateIndex]}!` : 
