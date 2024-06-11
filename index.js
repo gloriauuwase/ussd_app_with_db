@@ -110,7 +110,7 @@ app.post('/ussd', (req, res) => {
                 Igihe_Natoreye: new Date() // Add current timestamp
             };
 
-            const query = 'INSERT INTO voting_data SET ?';
+            const query = 'INSERT INTO voting_status SET ?';
             db.query(query, voteData, (err, result) => {
                 if (err) {
                     console.error('Error inserting data into database:', err.stack);
