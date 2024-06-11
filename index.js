@@ -26,11 +26,11 @@ db.connect(err => {
 
 // In-memory storage for votes (for simplicity)
 let votes = {
-    "Raymond I. ": 0,
-    "Florence U. ": 0,
-    "Jean Paul K. ": 0,
-    "Gaella U. ": 0,
-    "Danny H. ": 0
+    "uwase. ": 0,
+    "gloria. ": 0,
+    "munyana. ": 0,
+    "allen. ": 0,
+    "murindwa. ": 0
 };
 
 // In-memory storage for user data (for simplicity)
@@ -77,8 +77,8 @@ app.post('/ussd', (req, res) => {
             } else {
                 // Voting option selected
                 response = userLanguages[phoneNumber] === 'en' ? 
-                    `CON Select a candidate:\n1. Raymond IGABINEZA\n2. Florence UMUTONIWASE\n3. Jean Paul KWIBUKA\n4. Gaella UWAYO\n5. Danny HABIMANA` : 
-                    `CON Hitamo umukandida:\n1. Raymond IGABINEZA\n2. Florence UMUTONIWASE\n3. Jean Paul KWIBUKA\n4. Gaella UWAYO\n5. Danny HABIMANA`;
+                    `CON Select a candidate:\n1. uwase\n2. gloria\n3. munyana\n4. allen\n5. murindwa` : 
+                    `CON Hitamo umukandida:\n1. uwase\n2. gloria\n3. munyana\n4. allen\n5. murindwa`;
             }
         } else if (userInput[2] === '2') {
             // View votes option selected
