@@ -104,10 +104,10 @@ app.post('/ussd', (req, res) => {
             const voteData = {
                 session_id: sessionId,
                 phone_number: phoneNumber,
-                user_name: userNames[phoneNumber],
-                language_used: userLanguages[phoneNumber],
-                voted_candidate: candidateNames[candidateIndex],
-                voting_time: new Date() // Add current timestamp
+                Uwatoye: userNames[phoneNumber],
+                Ururimi: userLanguages[phoneNumber],
+                Uwatowe: candidateNames[candidateIndex],
+                Igihe_Natoreye: new Date() // Add current timestamp
             };
 
             const query = 'INSERT INTO voting_data SET ?';
